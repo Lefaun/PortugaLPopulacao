@@ -566,8 +566,7 @@ st.plotly_chart(fig)
 import plotly.graph_objects as go
 import time
 
-# Configurando o título da aplicação
-st.title("Gráfico de Linha com Simulação em Tempo Real")
+
 
 # Inicializando a simulação
 n_periods = 50  # Número de períodos para a simulação
