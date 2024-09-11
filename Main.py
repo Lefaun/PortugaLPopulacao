@@ -506,56 +506,57 @@ def calcular_estatisticas(populacao, mortes, nascimentos):
     return media, desvio_padrao, variancia, total_mortes, total_nascimentos
 
 # Título da aplicação
-st.title("Análise Interativa de Simulação da População")
+import pandas as pd
+import plotly.graph_objects as go
 
-# Inputs do usuário para adicionar novos dados
-pop = st.number_input("Adicionar população:", min_value=0, value=1000, step=1)
-mort = st.number_input("Adicionar mortes:", min_value=0, value=20, step=1)
-nasc = st.number_input("Adicionar nascimentos:", min_value=0, value=30, step=1)
+# Simulando dados
+np.random.seed(42)  # Definir um seed para reprodutibilidade
+n_periods = 50  # Número de períodos para a simulação
 
-# Botão para adicionar dados
-if st.button("Adicionar Dados"):
-    st.session_state['populacao'].append(pop)
-    st.session_state['mortes'].append(mort)
-    st.session_state['nascimentos'].append(nasc)
+# Simulação de valores
+populacao = np.random.normal(1000, 50, n_periods)  # Média de 1000, desvio padrão de 50
+mortes = np.random.randint(10, 50, n_periods)  # Total de mortes entre 10 e 50
+nascimentos = np.random.randint(20, 60, n_periods)  # Total de nascimentos entre 20 e 60
 
-# Cálculo das estatísticas
-media, desvio_padrao, variancia, total_mortes, total_nascimentos = calcular_estatisticas(
-    st.session_state['populacao'],
-    st.session_state['mortes'],
-    st.session_state['nascimentos']
-)
+# Calculando estatísticas da população
+media_populacao = np.mean(populacao)
+desvio_padrao_populacao = np.std(populacao)
+variancia_populacao = np.var(populacao)
 
-# Mostrar as estatísticas
-st.write(f"Média da População: {media}")
-st.write(f"Desvio Padrão: {desvio_padrao}")
-st.write(f"Variância: {variancia}")
-st.write(f"Total de Mortes: {total_mortes}")
-st.write(f"Total de Nascimentos: {total_nascimentos}")
+# Cumulativo de mortes e nascimentos para o gráfico
+total_mortes = np.cumsum(mortes)
+total_nascimentos = np.cumsum(nascimentos)
 
 # Criando DataFrame para o gráfico
 df = pd.DataFrame({
-    'Média': [media] * len(st.session_state['populacao']),
-    'Desvio Padrão': [desvio_padrao] * len(st.session_state['populacao']),
-    'Variância': [variancia] * len(st.session_state['populacao']),
-    'Total de Mortes': [sum(st.session_state['mortes'][:i+1]) for i in range(len(st.session_state['mortes']))],
-    'Total de Nascimentos': [sum(st.session_state['nascimentos'][:i+1]) for i in range(len(st.session_state['nascimentos']))]
+    'Período': range(1, n_periods + 1),
+    'Média População': [media_populacao] * n_periods,
+    'Desvio Padrão População': [desvio_padrao_populacao] * n_periods,
+    'Variância População': [variancia_populacao] * n_periods,
+    'Total de Mortes': total_mortes,
+    'Total de Nascimentos': total_nascimentos
 })
 
-# Criando o gráfico interativo
+# Configurando o título da aplicação
+st.title("Gráfico de Linha com Dados Simulados")
+
+# Criando o gráfico de linhas com Plotly
 fig = go.Figure()
 
-for coluna in df.columns:
-    fig.add_trace(go.Scatter(x=list(range(len(df))), y=df[coluna], mode='lines+markers', name=coluna))
+# Adicionando cada linha ao gráfico
+for coluna in ['Média População', 'Desvio Padrão População', 'Variância População', 'Total de Mortes', 'Total de Nascimentos']:
+    fig.add_trace(go.Scatter(x=df['Período'], y=df[coluna], mode='lines+markers', name=coluna))
 
+# Customizando o layout do gráfico
 fig.update_layout(
-    title="Estatísticas da População",
+    title="Evolução das Estatísticas da População",
     xaxis_title="Período",
     yaxis_title="Valores",
     legend_title="Métricas",
+    template="plotly_white"
 )
 
-# Mostrar o gráfico
+# Mostrando o gráfico no Streamlit
 st.plotly_chart(fig)
 
 
