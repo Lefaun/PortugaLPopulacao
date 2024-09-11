@@ -15,7 +15,6 @@ from scipy import stats
 # Page configuration
 st.set_page_config(
     page_title="Portugal Population Dashboard",
-    page_icon="🏂",
     layout="wide",  # Layout is wide to allow more flexibility on desktop, while components will stack on mobile.
     initial_sidebar_state="expanded"
 )
@@ -94,7 +93,7 @@ st.markdown(
 
 #######################
 # Load data
-df_reshaped = pd.read_csv('data/us-population-2010-2019-reshaped.csv')
+df_reshaped = pd.read_csv('Data/Populacao.csv')
 
 #######################
 # Sidebar
@@ -130,23 +129,6 @@ def make_heatmap(input_df, input_y, input_x, input_color, input_color_theme):
         ) 
     # height=300
     return heatmap
-
-# Choropleth map
-#def make_choropleth(input_df, input_id, input_column, input_color_theme):
-    #choropleth = px.choropleth(input_df, locations=input_id, color=input_column, locationmode="USA-states",
-                               #color_continuous_scale=input_color_theme,
-                               #range_color=(0, max(df_selected_year.population)),
-                               #scope="usa",
-                               #labels={'population':'Population'}
-                              #)
-    #choropleth.update_layout(
-        #template='plotly_dark',
-        #plot_bgcolor='rgba(0, 0, 0, 0)',
-        #paper_bgcolor='rgba(0, 0, 0, 0)',
-        #margin=dict(l=0, r=0, t=0, b=0),
-        #height=350
-    #)
-    #return choropleth
 
 
 # Donut chart
@@ -505,7 +487,76 @@ def perform_regression(time, population):
     X = sm.add_constant(time)
     model = sm.OLS(population, X).fit()
     return model
+import numpy as np
+import plotly.graph_objects as go
 
+# Inicialização de listas de dados
+if 'populacao' not in st.session_state:
+    st.session_state['populacao'] = []
+    st.session_state['mortes'] = []
+    st.session_state['nascimentos'] = []
+
+# Função para calcular estatísticas
+def calcular_estatisticas(populacao, mortes, nascimentos):
+    media = np.mean(populacao) if populacao else 0
+    desvio_padrao = np.std(populacao) if populacao else 0
+    variancia = np.var(populacao) if populacao else 0
+    total_mortes = sum(mortes)
+    total_nascimentos = sum(nascimentos)
+    return media, desvio_padrao, variancia, total_mortes, total_nascimentos
+
+# Título da aplicação
+st.title("Análise Interativa de Simulação da População")
+
+# Inputs do usuário para adicionar novos dados
+pop = st.number_input("Adicionar população:", min_value=0, value=1000, step=1)
+mort = st.number_input("Adicionar mortes:", min_value=0, value=20, step=1)
+nasc = st.number_input("Adicionar nascimentos:", min_value=0, value=30, step=1)
+
+# Botão para adicionar dados
+if st.button("Adicionar Dados"):
+    st.session_state['populacao'].append(pop)
+    st.session_state['mortes'].append(mort)
+    st.session_state['nascimentos'].append(nasc)
+
+# Cálculo das estatísticas
+media, desvio_padrao, variancia, total_mortes, total_nascimentos = calcular_estatisticas(
+    st.session_state['populacao'],
+    st.session_state['mortes'],
+    st.session_state['nascimentos']
+)
+
+# Mostrar as estatísticas
+st.write(f"Média da População: {media}")
+st.write(f"Desvio Padrão: {desvio_padrao}")
+st.write(f"Variância: {variancia}")
+st.write(f"Total de Mortes: {total_mortes}")
+st.write(f"Total de Nascimentos: {total_nascimentos}")
+
+# Criando DataFrame para o gráfico
+df = pd.DataFrame({
+    'Média': [media] * len(st.session_state['populacao']),
+    'Desvio Padrão': [desvio_padrao] * len(st.session_state['populacao']),
+    'Variância': [variancia] * len(st.session_state['populacao']),
+    'Total de Mortes': [sum(st.session_state['mortes'][:i+1]) for i in range(len(st.session_state['mortes']))],
+    'Total de Nascimentos': [sum(st.session_state['nascimentos'][:i+1]) for i in range(len(st.session_state['nascimentos']))]
+})
+
+# Criando o gráfico interativo
+fig = go.Figure()
+
+for coluna in df.columns:
+    fig.add_trace(go.Scatter(x=list(range(len(df))), y=df[coluna], mode='lines+markers', name=coluna))
+
+fig.update_layout(
+    title="Estatísticas da População",
+    xaxis_title="Período",
+    yaxis_title="Valores",
+    legend_title="Métricas",
+)
+
+# Mostrar o gráfico
+st.plotly_chart(fig)
 
 
 # Footer
