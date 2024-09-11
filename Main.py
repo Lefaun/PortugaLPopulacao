@@ -223,8 +223,8 @@ with col[0]:
     df_population_difference_sorted = calculate_population_difference(df_reshaped, selected_year)
 
     if selected_year > 2010:
-        first_state_name = df_population_difference_sorted.states.iloc[0]
-        first_state_population = format_number(df_population_difference_sorted.population.iloc[0])
+        first_state_name = df_population_difference_sorted.concelhos.iloc[0]
+        first_state_population = format_number(df_population_difference_sorted.populacao.iloc[0])
         first_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[0])
     else:
         first_state_name = '-'
@@ -233,8 +233,8 @@ with col[0]:
     st.metric(label=first_state_name, value=first_state_population, delta=first_state_delta)
 
     if selected_year > 2010:
-        last_state_name = df_population_difference_sorted.states.iloc[-1]
-        last_state_population = format_number(df_population_difference_sorted.population.iloc[-1])   
+        last_state_name = df_population_difference_sorted.concelhos.iloc[-1]
+        last_state_population = format_number(df_population_difference_sorted.populacao.iloc[-1])   
         last_state_delta = format_number(df_population_difference_sorted.population_difference.iloc[-1])   
     else:
         last_state_name = '-'
