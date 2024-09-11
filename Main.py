@@ -187,13 +187,13 @@ def calculate_population_difference(input_df, input_year):
   selected_year_data = input_df[input_df['year'] == input_year].reset_index()
   previous_year_data = input_df[input_df['year'] == input_year - 1].reset_index()
   selected_year_data['population_difference'] = selected_year_data.populacao.sub(previous_year_data.populacao, fill_value=0)
-  return pd.concat([selected_year_data.states, selected_year_data.id, selected_year_data.populacao, selected_year_data.population_difference], axis=1).sort_values(by="population_difference", ascending=False)
+  return pd.concat([selected_year_data.concelhos, selected_year_data.id, selected_year_data.populacao, selected_year_data.population_difference], axis=1).sort_values(by="population_difference", ascending=False)
 
-def simulate_population_step(population, birth_rate, death_rate):
+def simulate_population_step(populacao, birth_rate, death_rate):
     births = np.random.poisson(birth_rate)
     deaths = np.random.poisson(death_rate)
     net_change = births - deaths
-    new_population = population + net_change
+    new_population = populacao + net_change
     
     return new_population, births, deaths
 
