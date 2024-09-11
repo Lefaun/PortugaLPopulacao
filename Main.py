@@ -104,7 +104,7 @@ with st.sidebar:
     
     selected_year = st.selectbox('Selecione o ano', year_list)
     df_selected_year = df_reshaped[df_reshaped.year == selected_year]
-    df_selected_year_sorted = df_selected_year.sort_values(by="population", ascending=False)
+    df_selected_year_sorted = df_selected_year.sort_values(by="populacao", ascending=False)
 
     color_theme_list = ['blues', 'cividis', 'greens', 'inferno', 'magma', 'plasma', 'reds', 'rainbow', 'turbo', 'viridis']
     selected_color_theme = st.selectbox('Selecione a cor do tema', color_theme_list)
