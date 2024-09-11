@@ -565,7 +565,79 @@ st.markdown("""
     <hr style="border:1px solid gray"> </hr>
     <p style="text-align: center;">Desenvolvido por <strong>Paulo Ricardo Monteiro</strong></p>
     """, unsafe_allow_html=True)
+############### Segunda Versão do Gráfico
 
+import plotly.graph_objects as go
+import time
+
+# Configurando o título da aplicação
+st.title("Gráfico de Linha com Simulação em Tempo Real")
+
+# Inicializando a simulação
+n_periods = 50  # Número de períodos para a simulação
+np.random.seed(42)  # Definir um seed para reprodutibilidade
+
+# Criando listas vazias para armazenar os dados
+periodos = []
+populacao = []
+total_mortes = []
+total_nascimentos = []
+
+# Inicializando o gráfico de linha
+fig = go.Figure()
+
+# Elemento de espaço reservado para o gráfico
+grafico = st.empty()
+
+# Loop de simulação em tempo real
+for i in range(1, n_periods + 1):
+    # Gerando dados aleatórios para cada iteração
+    nova_populacao = np.random.normal(1000, 50)
+    novas_mortes = np.random.randint(10, 50)
+    novos_nascimentos = np.random.randint(20, 60)
+
+    # Atualizando listas com novos dados
+    periodos.append(i)
+    populacao.append(nova_populacao)
+    total_mortes.append(np.sum(total_mortes) + novas_mortes)
+    total_nascimentos.append(np.sum(total_nascimentos) + novos_nascimentos)
+
+    # Calculando estatísticas da população
+    media_populacao = np.mean(populacao)
+    desvio_padrao_populacao = np.std(populacao)
+    variancia_populacao = np.var(populacao)
+
+    # Criando DataFrame para o gráfico
+    df = pd.DataFrame({
+        'Período': periodos,
+        'Média População': [media_populacao] * len(periodos),
+        'Desvio Padrão População': [desvio_padrao_populacao] * len(periodos),
+        'Variância População': [variancia_populacao] * len(periodos),
+        'Total de Mortes': total_mortes,
+        'Total de Nascimentos': total_nascimentos
+    })
+
+    # Resetando o gráfico
+    fig = go.Figure()
+
+    # Adicionando cada linha ao gráfico
+    for coluna in ['Média População', 'Desvio Padrão População', 'Variância População', 'Total de Mortes', 'Total de Nascimentos']:
+        fig.add_trace(go.Scatter(x=df['Período'], y=df[coluna], mode='lines+markers', name=coluna))
+
+    # Customizando o layout do gráfico
+    fig.update_layout(
+        title="Evolução das Estatísticas da População em Tempo Real",
+        xaxis_title="Período",
+        yaxis_title="Valores",
+        legend_title="Métricas",
+        template="plotly_white"
+    )
+
+    # Atualizando o gráfico no Streamlit
+    grafico.plotly_chart(fig)
+
+    # Intervalo de atualização
+    time.sleep(1)  # Atualiza a cada 1 segundo
 
 # Configuração da interface do Streamlit
 #st.set_page_config(page_title="Simulação de População em Tempo Real", layout="wide")
