@@ -98,7 +98,7 @@ df_reshaped = pd.read_csv('Data/Populacao.csv')
 #######################
 # Sidebar
 with st.sidebar:
-    st.title('🏂 Portugal Population Dashboard')
+    st.title(' População  Portugal Dashboard')
     
     year_list = list(df_reshaped.year.unique())[::-1]
     
