@@ -258,7 +258,7 @@ with col[0]:
         #states_migration_greater= kpi2.metric(label="Nascimentos no último segundo", value=int(births))
         #states_migration_less = kpi3.metric(label= "Mortes no último segundo", value=int(deaths))
         states_migration_greater = round((len(df_greater_50000)/df_population_difference_sorted.concelhos.nunique())*100)
-        states_migration_less = round((len(df_less_50000)/df_population_difference_sorted.conselhos.nunique())*100)
+        states_migration_less = round((len(df_less_50000)/df_population_difference_sorted.concelhos.nunique())*100)
         #donut_chart_greater = make_donut(births_data, 'Births', 'green')
         donut_chart_greater = make_donut(states_migration_greater, 'Births', 'green')
         #donut_chart_less = make_donut(deaths_data, 'Deaths', 'red')
