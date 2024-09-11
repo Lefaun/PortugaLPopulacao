@@ -560,11 +560,7 @@ fig.update_layout(
 st.plotly_chart(fig)
 
 
-# Footer
-st.markdown("""
-    <hr style="border:1px solid gray"> </hr>
-    <p style="text-align: center;">Desenvolvido por <strong>Paulo Ricardo Monteiro</strong></p>
-    """, unsafe_allow_html=True)
+
 ############### Segunda Versão do Gráfico
 
 import plotly.graph_objects as go
@@ -638,6 +634,12 @@ for i in range(1, n_periods + 1):
 
     # Intervalo de atualização
     time.sleep(1)  # Atualiza a cada 1 segundo
+
+# Footer
+st.markdown("""
+    <hr style="border:1px solid gray"> </hr>
+    <p style="text-align: center;">Desenvolvido por <strong>Paulo Ricardo Monteiro</strong></p>
+    """, unsafe_allow_html=True)
 
 # Configuração da interface do Streamlit
 #st.set_page_config(page_title="Simulação de População em Tempo Real", layout="wide")
