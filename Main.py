@@ -440,7 +440,7 @@ with col[1]:
     
 
 with col[2]:
-    st.markdown('#### Top States')
+    st.markdown('#### Concelhos')
 
     st.dataframe(df_selected_year_sorted,
                  column_order=("states", "population"),
@@ -458,7 +458,7 @@ with col[2]:
                      )}
                  )
     
-    with st.expander('About', expanded=True):
+    with st.expander('Dados', expanded=True):
         st.write('''
             - Data: [Portugal. Census INE - Instituto Nacional de Estatística e PORDATA ](https://www.census.gov/data/datasets/time-series/demo/popest/2010s-state-total.html).
             - :orange[**Nascimentos/Mortes**]: Demografia Nascimentos e Mortes por Ano atualizados ao segundo
