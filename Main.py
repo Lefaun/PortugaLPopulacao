@@ -443,18 +443,18 @@ with col[2]:
     st.markdown('#### Concelhos')
 
     st.dataframe(df_selected_year_sorted,
-                 column_order=("states", "population"),
+                 column_order=("concelhos", "populacao"),
                  hide_index=True,
                  width=None,
                  column_config={
-                    "states": st.column_config.TextColumn(
-                        "States",
+                    "concelhos": st.column_config.TextColumn(
+                        "concelhos",
                     ),
-                    "population": st.column_config.ProgressColumn(
-                        "Population",
+                    "populacao": st.column_config.ProgressColumn(
+                        "populacao",
                         format="%f",
                         min_value=0,
-                        max_value=max(df_selected_year_sorted.population),
+                        max_value=max(df_selected_year_sorted.populacao),
                      )}
                  )
     
