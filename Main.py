@@ -14,7 +14,7 @@ from scipy import stats
 #######################
 # Page configuration
 st.set_page_config(
-    page_title="Portugal Population Dashboard",
+    page_title="Portugal População Dashboard",
     layout="wide",  # Layout is wide to allow more flexibility on desktop, while components will stack on mobile.
     initial_sidebar_state="expanded"
 )
@@ -218,7 +218,7 @@ def perform_regression(time, population):
 col = st.columns((1.5, 4.5, 2), gap='medium')
 
 with col[0]:
-    st.markdown('#### Gains/Losses')
+    st.markdown('#### Nascimentos/Mortes')
 
     df_population_difference_sorted = calculate_population_difference(df_reshaped, selected_year)
 
@@ -243,7 +243,7 @@ with col[0]:
     st.metric(label=last_state_name, value=last_state_population, delta=last_state_delta)
 
     
-    st.markdown('#### States Migration')
+    st.markdown('#### Equilibrio Demográfico')
 
     if selected_year >= 2010:
         # Filter states with population difference > 50000
